@@ -23,7 +23,7 @@ class Simulation {
           this.transactions.push(result);
         }
       } else {
-        console.log("Strategy finished acting on day", day.date);
+        console.log("Strategy finished acting on day", day.date.toLocaleDateString());
         break;
       }
     }
