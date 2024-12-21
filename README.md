@@ -19,6 +19,12 @@ This project is a simulation of different investment strategies on the S&P 500 i
 
 - **AllUpfront**: A strategy that invests all available capital upfront.
 
+## Existing Strategies
+
+- **AllUpfront**: Invests all available capital at once.
+- **DollarCostAveraging**: Invests a fixed amount at regular intervals.
+- **DownturnFixed**: Invests a fixed amount during market downturns.
+
 ## Scripts
 
 - **run**: Executes the main script using `ts-node`.
