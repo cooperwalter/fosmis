@@ -18,8 +18,12 @@ class Simulation {
     const days = marketIndex.getDaysBetween(this.scenario.startDate, this.scenario.endDate);
     for (const day of days) {
       if (this.strategy.canAct()) {
-        this.transactions.push(this.strategy.act(day));
+        const result = this.strategy.act(day);
+        if (result) {
+          this.transactions.push(result);
+        }
       } else {
+        console.log("Strategy finished acting on day", day.date);
         break;
       }
     }

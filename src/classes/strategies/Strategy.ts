@@ -12,7 +12,7 @@ abstract class Strategy {
     return this.principal > 0;
   }
 
-  abstract act(day: MarketDay): Transaction;
+  abstract act(day: MarketDay): Transaction | null;
 
 
   public spend(amount: number): number {
