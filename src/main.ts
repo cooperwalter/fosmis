@@ -1,8 +1,12 @@
 // Fosmis: Finding Optimal Stock Market Investing Strategy
 
+// Strategies
 import AllUpfront from "./classes/strategies/AllUpfront";
 import DollarCostAveraging from "./classes/strategies/DollarCostAveraging";
+import DownturnProportional from "./classes/strategies/DownturnProportional";
 import DownturnFixed from "./classes/strategies/DownturnFixed";
+
+// Classes
 import Scenario from "./classes/Scenario";
 import Simulation from "./classes/Simulation";
 import Summarizer from "./classes/Summarizer";
@@ -34,6 +38,8 @@ async function main() {
   await runSimulation("Dollar Cost Averaging", DollarCostAveraging, [1000, 14]); // every 2 weeks
   console.log("");
   await runSimulation("Downturn Fixed", DownturnFixed, [1000, 1]);
+  console.log("");
+  await runSimulation("Downturn Proportional", DownturnProportional, [1, 10]);
 }
 
 main();
