@@ -33,10 +33,12 @@ async function runSimulation(strategyName: string, StrategyClass: any, strategyA
   const sAndP500 = await loadIndex(Index.S_AND_P_500);
 
   // Create a new scenario with the S&P 500 index
-  const scenario = new Scenario(sAndP500.firstDay.date, sAndP500.lastDay.date, PRINCIPAL, sAndP500);
+  // const scenario = new Scenario(sAndP500.firstDay.date, sAndP500.lastDay.date, PRINCIPAL, sAndP500);
+  const scenario = new Scenario(new Date("2020-01-01"), sAndP500.lastDay.date, PRINCIPAL, sAndP500);
+  // const scenario = new Scenario(new Date("2015-01-01"), new Date("2020-01-01"), PRINCIPAL, sAndP500);
 
   // Create a new strategy instance with the scenario and strategy arguments
-  const strategy = new StrategyClass(scenario.principal, ...strategyArgs);
+  const strategy = new StrategyClass(strategyName, scenario.principal, ...strategyArgs);
 
   // Run the simulation
   const simulation = new Simulation(scenario, strategy);

@@ -21,12 +21,13 @@ class DownturnFixed extends Strategy {
 
   /**
    * Create a DownturnFixed strategy.
+   * @param {string} name - The name of the strategy.
    * @param {number} principal - The initial amount of money to invest.
    * @param {number} fixedAmount - The fixed amount to spend when the drop condition is met.
    * @param {number} dropPercentage - The percentage drop in price that triggers a transaction.
    */
-  constructor(principal: number, fixedAmount: number, dropPercentage: number) {
-    super(principal);
+  constructor(name: string, principal: number, fixedAmount: number, dropPercentage: number) {
+    super(name, principal);
     this.fixedAmount = fixedAmount;
     this.dropPercentage = dropPercentage;
     this.lastPrice = null;
