@@ -32,8 +32,9 @@ class Summarizer {
    * @returns {Object} An object containing the percentage gain and annualized return.
    * @property {number} percentageGain - The percentage gain on the investment.
    * @property {number} annualizedReturn - The annualized return on the investment.
+   * @property {number} numberOfTransactions - The number of transactions made.
    */
-  public calculateReturn(): { percentageGain: number, annualizedReturn: number } {
+  public calculateReturn(): { percentageGain: number, annualizedReturn: number, numberOfTransactions: number } {
     // Get the last day of the MarketIndex
     const lastDay = this._marketIndex.lastDay;
     const capitalGains: Array<CapitalGain> = [];
@@ -56,7 +57,7 @@ class Summarizer {
     const totalReturn = (totalProfit + this._principal) / this._principal;
     const annualizedReturn = ((Math.pow(totalReturn, 1 / years) - 1) * 100).toFixed(2);
 
-    return { percentageGain: parseFloat(percentageGain), annualizedReturn: parseFloat(annualizedReturn) };
+    return { percentageGain: parseFloat(percentageGain), annualizedReturn: parseFloat(annualizedReturn), numberOfTransactions: this._transactions.length };
   }
 }
 

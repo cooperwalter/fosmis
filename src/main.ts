@@ -46,10 +46,11 @@ async function runSimulation(strategyName: string, StrategyClass: any, strategyA
 
   // Summarize the results
   const summarizer = new Summarizer(scenario.principal, transactions, sAndP500);
-  const { percentageGain, annualizedReturn } = summarizer.calculateReturn();
+  const { percentageGain, annualizedReturn, numberOfTransactions } = summarizer.calculateReturn();
   console.log("<Results>");
   console.log(`* Percentage return: ${percentageGain}%`);
   console.log(`* Annualized return: ${annualizedReturn}%`);
+  console.log(`* Number of transactions: ${numberOfTransactions}`);
   console.log("</Results>");
 }
 
