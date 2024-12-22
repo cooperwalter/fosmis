@@ -18,6 +18,8 @@ import Simulation from "./classes/Simulation";
 import Summarizer from "./classes/Summarizer";
 import { loadIndex, Index } from "./data/data-loader";
 
+import chalk from "chalk";
+
 /**
  * Configuration for different investment strategies.
  * 
@@ -95,7 +97,7 @@ async function runAllSimulationsFor(StrategyClass: any, strategyArgArrays: Array
  * printing the results to the console.
  */
 async function main() {
-  console.log("****** Fosmis Simulations ******");
+  console.log(chalk.bgGreen("****** Fosmis Simulations ******"));
   console.log("");
 
   // Load the S&P 500 index from the data
@@ -108,17 +110,18 @@ async function main() {
   ];
 
   for (const scenario of scenarios) {
-    console.log(`**** Scenario: ${scenario.startDate.toISOString()} to ${scenario.endDate.toISOString()} ****`);
-    console.log(`****** Fosmis Simulations: ${AllUpfront.name} ******`);
+    console.log(`**** Scenario: ${chalk.blue(scenario.startDate.toISOString())} to ${chalk.blue(scenario.endDate.toISOString())} ****`);
+    console.log("");
+    console.log(`****** Fosmis Simulations: ${chalk.blue(AllUpfront.name)} ******`);
     await runAllSimulationsFor(AllUpfront, strategyConfigs[AllUpfront.name], [scenario]);
     console.log("");
-    console.log(`****** Fosmis Simulations: ${DollarCostAveraging.name} ******`);
+    console.log(`****** Fosmis Simulations: ${chalk.blue(DollarCostAveraging.name)} ******`);
     await runAllSimulationsFor(DollarCostAveraging, strategyConfigs[DollarCostAveraging.name], [scenario]);
     console.log("");
-    console.log(`****** Fosmis Simulations: ${DownturnFixed.name} ******`);
+      console.log(`****** Fosmis Simulations: ${chalk.blue(DownturnFixed.name)} ******`);
     await runAllSimulationsFor(DownturnFixed, strategyConfigs[DownturnFixed.name], [scenario]);
     console.log("");
-    console.log(`****** Fosmis Simulations: ${DownturnProportional.name} ******`);
+    console.log(`****** Fosmis Simulations: ${chalk.blue(DownturnProportional.name)} ******`);
     await runAllSimulationsFor(DownturnProportional, strategyConfigs[DownturnProportional.name], [scenario]);
     console.log("");
   }
