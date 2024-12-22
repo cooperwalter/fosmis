@@ -21,14 +21,39 @@ import { loadIndex, Index } from "./data/data-loader";
 const PRINCIPAL = 100000;
 
 /**
+ * Configuration for different investment strategies.
+ * 
+ * This object maps strategy class names to their respective configuration arrays.
+ * Each strategy configuration array contains the parameters required to initialize
+ * and execute the strategy during simulations.
+ */
+const strategyConfigs: { [key: string]: any[] } = {
+  // no args, all principal spent on the first day
+  [AllUpfront.name]: [
+    []
+  ],
+  // args are (fixedAmount, interval)
+  [DollarCostAveraging.name]: [
+    [1000, 14] // $1000 every 14 days
+  ],
+  // args are (fixedAmount, dropPercentage)
+  [DownturnFixed.name]: [
+    [10000, 2] // $10,000 when the price drops by at least 2%
+  ],
+  // args are (dropPercentage, dropSpendMultiplier)
+  [DownturnProportional.name]: [
+    [2, 10] // (drop % * principal * 10) when the price drops by at least 2%
+  ]
+}
+
+/**
  * Runs a simulation for a given investment strategy.
  * 
- * @param {string} strategyName - The name of the investment strategy.
  * @param {any} StrategyClass - The class representing the investment strategy.
  * @param {any[]} strategyArgs - The arguments to initialize the strategy.
  */
 async function runSimulation(StrategyClass: any, strategyArgs: any[]) {
-  console.log(`****** Fosmis Simulation: ${StrategyClass.name} ******`);
+  console.log(`****** ${StrategyClass.name} - ${strategyArgs.join(", ")} ******`);
 
   // Load the S&P 500 index from the data
   const sAndP500 = await loadIndex(Index.S_AND_P_500);
@@ -58,6 +83,19 @@ async function runSimulation(StrategyClass: any, strategyArgs: any[]) {
 }
 
 /**
+ * Runs all simulations for a given strategy class with multiple configurations.
+ * 
+ * @param {any} StrategyClass - The class representing the investment strategy.
+ * @param {Array<any[]>} strategyArgArrays - An array of argument arrays for different configurations of the strategy.
+ */
+async function runAllSimulationsFor(StrategyClass: any, strategyArgArrays: Array<any[]>) {
+  console.log(`****** Fosmis Simulation: ${StrategyClass.name} ******`);
+  for (const strategyArgs of strategyArgArrays) {
+    await runSimulation(StrategyClass, strategyArgs);
+  }
+}
+
+/**
  * Main function to run all simulations.
  * 
  * It initializes the principal amount and runs simulations for each strategy,
@@ -67,13 +105,13 @@ async function main() {
   console.log("****** Fosmis Simulations ******");
   console.log(`Starting Principal: $${PRINCIPAL.toLocaleString()}`);
   console.log("");
-  await runSimulation(AllUpfront, []);
+  await runAllSimulationsFor(AllUpfront, strategyConfigs[AllUpfront.name]);
   console.log("");
-  await runSimulation(DollarCostAveraging, [1000, 14]); // every 2 weeks
+  await runAllSimulationsFor(DollarCostAveraging, strategyConfigs[DollarCostAveraging.name]);
   console.log("");
-  await runSimulation(DownturnFixed, [10000, 2]);
+  await runAllSimulationsFor(DownturnFixed, strategyConfigs[DownturnFixed.name]);
   console.log("");
-  await runSimulation(DownturnProportional, [2, 10]);
+  await runAllSimulationsFor(DownturnProportional, strategyConfigs[DownturnProportional.name]);
 }
 
 main();
