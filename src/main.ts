@@ -37,9 +37,9 @@ async function main() {
   console.log("");
   await runSimulation("Dollar Cost Averaging", DollarCostAveraging, [1000, 14]); // every 2 weeks
   console.log("");
-  await runSimulation("Downturn Fixed", DownturnFixed, [1000, 1]);
+  await runSimulation("Downturn Fixed", DownturnFixed, [10000, 2]);
   console.log("");
-  await runSimulation("Downturn Proportional", DownturnProportional, [1, 10]);
+  await runSimulation("Downturn Proportional", DownturnProportional, [2, 10]);
 }
 
 main();
