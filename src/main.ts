@@ -18,8 +18,6 @@ import Simulation from "./classes/Simulation";
 import Summarizer from "./classes/Summarizer";
 import { loadIndex, Index } from "./data/data-loader";
 
-const PRINCIPAL = 100000;
-
 /**
  * Configuration for different investment strategies.
  * 
@@ -47,32 +45,24 @@ const strategyConfigs: { [key: string]: any[] } = {
 }
 
 /**
- * Runs a simulation for a given investment strategy.
+ * Runs a simulation for a given investment strategy and scenario.
  * 
  * @param {any} StrategyClass - The class representing the investment strategy.
  * @param {any[]} strategyArgs - The arguments to initialize the strategy.
+ * @param {Scenario} scenario - The scenario to run the simulation on.
  */
-async function runSimulation(StrategyClass: any, strategyArgs: any[]) {
-  console.log(`****** ${StrategyClass.name} - ${strategyArgs.join(", ")} ******`);
+async function runSimulation(StrategyClass: any, strategyArgs: any[], scenario: Scenario) {
+  console.log(`Arguments: ${strategyArgs.join(", ")}`);
 
-  // Load the S&P 500 index from the data
-  const sAndP500 = await loadIndex(Index.S_AND_P_500);
-  
-  // Create a new scenario with the S&P 500 index
-  // const scenario = new Scenario(sAndP500.firstDay.date, sAndP500.lastDay.date, PRINCIPAL, sAndP500);
-  const scenario = new Scenario(new Date("2020-01-01"), sAndP500.lastDay.date, PRINCIPAL, sAndP500);
-  // const scenario = new Scenario(new Date("2015-01-01"), new Date("2020-01-01"), PRINCIPAL, sAndP500);
-  
   // Create a new strategy instance with the scenario and strategy arguments
   const strategy = new StrategyClass(scenario.principal, ...strategyArgs);
-
 
   // Run the simulation
   const simulation = new Simulation(scenario, strategy);
   const transactions = simulation.run();
 
-  // Summarize the results
-  const summarizer = new Summarizer(scenario.principal, transactions, sAndP500);
+  // Assuming the correct property is `scenario.dataIndex` or similar
+  const summarizer = new Summarizer(scenario.principal, transactions, scenario.marketIndex);
   const { percentageGain, annualizedReturn, numberOfTransactions, cashLeft } = summarizer.calculateReturn();
   console.log("<Results>");
   console.log(`* Percentage return: ${percentageGain}%`);
@@ -83,35 +73,55 @@ async function runSimulation(StrategyClass: any, strategyArgs: any[]) {
 }
 
 /**
- * Runs all simulations for a given strategy class with multiple configurations.
+ * Runs all simulations for a given strategy class with multiple configurations and scenarios.
  * 
  * @param {any} StrategyClass - The class representing the investment strategy.
  * @param {Array<any[]>} strategyArgArrays - An array of argument arrays for different configurations of the strategy.
+ * @param {Scenario[]} scenarios - An array of scenarios to run the simulations on.
  */
-async function runAllSimulationsFor(StrategyClass: any, strategyArgArrays: Array<any[]>) {
-  console.log(`****** Fosmis Simulation: ${StrategyClass.name} ******`);
-  for (const strategyArgs of strategyArgArrays) {
-    await runSimulation(StrategyClass, strategyArgs);
+async function runAllSimulationsFor(StrategyClass: any, strategyArgArrays: Array<any[]>, scenarios: Scenario[]) {
+  for (const scenario of scenarios) {
+    console.log(`Scenario: ${scenario.startDate.toISOString()} to ${scenario.endDate.toISOString()}`);
+    for (const strategyArgs of strategyArgArrays) {
+      await runSimulation(StrategyClass, strategyArgs, scenario);
+    }
   }
 }
 
 /**
  * Main function to run all simulations.
  * 
- * It initializes the principal amount and runs simulations for each strategy,
+ * It initializes the principal amount and runs simulations for each strategy and scenario,
  * printing the results to the console.
  */
 async function main() {
   console.log("****** Fosmis Simulations ******");
-  console.log(`Starting Principal: $${PRINCIPAL.toLocaleString()}`);
   console.log("");
-  await runAllSimulationsFor(AllUpfront, strategyConfigs[AllUpfront.name]);
-  console.log("");
-  await runAllSimulationsFor(DollarCostAveraging, strategyConfigs[DollarCostAveraging.name]);
-  console.log("");
-  await runAllSimulationsFor(DownturnFixed, strategyConfigs[DownturnFixed.name]);
-  console.log("");
-  await runAllSimulationsFor(DownturnProportional, strategyConfigs[DownturnProportional.name]);
+
+  // Load the S&P 500 index from the data
+  const sAndP500 = await loadIndex(Index.S_AND_P_500);
+
+  // Define multiple scenarios
+  const scenarios = [
+    new Scenario(new Date("2020-01-01"), sAndP500.lastDay.date, 100000, sAndP500),
+    new Scenario(new Date("2015-01-01"), new Date("2020-01-01"), 100000, sAndP500)
+  ];
+
+  for (const scenario of scenarios) {
+    console.log(`**** Scenario: ${scenario.startDate.toISOString()} to ${scenario.endDate.toISOString()} ****`);
+    console.log(`****** Fosmis Simulations: ${AllUpfront.name} ******`);
+    await runAllSimulationsFor(AllUpfront, strategyConfigs[AllUpfront.name], [scenario]);
+    console.log("");
+    console.log(`****** Fosmis Simulations: ${DollarCostAveraging.name} ******`);
+    await runAllSimulationsFor(DollarCostAveraging, strategyConfigs[DollarCostAveraging.name], [scenario]);
+    console.log("");
+    console.log(`****** Fosmis Simulations: ${DownturnFixed.name} ******`);
+    await runAllSimulationsFor(DownturnFixed, strategyConfigs[DownturnFixed.name], [scenario]);
+    console.log("");
+    console.log(`****** Fosmis Simulations: ${DownturnProportional.name} ******`);
+    await runAllSimulationsFor(DownturnProportional, strategyConfigs[DownturnProportional.name], [scenario]);
+    console.log("");
+  }
 }
 
 main();
