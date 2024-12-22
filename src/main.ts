@@ -1,4 +1,10 @@
-// Fosmis: Finding Optimal Stock Market Investing Strategy
+/**
+ * Fosmis: Finding Optimal Stock Market Investing Strategy
+ * 
+ * This module simulates various stock market investment strategies using historical data.
+ * It loads the S&P 500 index data and runs simulations for different strategies, 
+ * summarizing the results in terms of percentage and annualized returns.
+ */
 
 // Strategies
 import AllUpfront from "./classes/strategies/AllUpfront";
@@ -14,6 +20,13 @@ import { loadIndex, Index } from "./data/data-loader";
 
 const PRINCIPAL = 100000;
 
+/**
+ * Runs a simulation for a given investment strategy.
+ * 
+ * @param {string} strategyName - The name of the investment strategy.
+ * @param {any} StrategyClass - The class representing the investment strategy.
+ * @param {any[]} strategyArgs - The arguments to initialize the strategy.
+ */
 async function runSimulation(strategyName: string, StrategyClass: any, strategyArgs: any[]) {
   console.log(`****** Fosmis Simulation: ${strategyName} ******`);
   // Load the S&P 500 index from the data
@@ -38,6 +51,12 @@ async function runSimulation(strategyName: string, StrategyClass: any, strategyA
   console.log("</Results>");
 }
 
+/**
+ * Main function to run all simulations.
+ * 
+ * It initializes the principal amount and runs simulations for each strategy,
+ * printing the results to the console.
+ */
 async function main() {
   console.log("****** Fosmis Simulations ******");
   console.log(`Starting Principal: $${PRINCIPAL.toLocaleString()}`);

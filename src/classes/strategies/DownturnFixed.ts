@@ -1,12 +1,30 @@
+/**
+ * @module DownturnFixed
+ * 
+ * This module defines the DownturnFixed strategy, which is a type of investment strategy
+ * that triggers a transaction when the market price drops by a specified percentage.
+ * The strategy spends a fixed amount of the principal when the condition is met.
+ */
+
 import Strategy from "./Strategy";
 import MarketDay from "../MarketDay";
 import Transaction from "../Transaction";
 
+/**
+ * Class representing a downturn fixed strategy.
+ * @extends Strategy
+ */
 class DownturnFixed extends Strategy {
   private fixedAmount: number;
   private dropPercentage: number;
   private lastPrice: number | null;
 
+  /**
+   * Create a DownturnFixed strategy.
+   * @param {number} principal - The initial amount of money to invest.
+   * @param {number} fixedAmount - The fixed amount to spend when the drop condition is met.
+   * @param {number} dropPercentage - The percentage drop in price that triggers a transaction.
+   */
   constructor(principal: number, fixedAmount: number, dropPercentage: number) {
     super(principal);
     this.fixedAmount = fixedAmount;
@@ -14,6 +32,12 @@ class DownturnFixed extends Strategy {
     this.lastPrice = null;
   }
 
+  /**
+   * Determine the action to take on a given market day. For the DownturnFixed strategy,
+   * the strategy spends a fixed amount of the principal when the drop condition is met.
+   * @param {MarketDay} day - The market day containing the current price.
+   * @returns {Transaction|null} - A transaction if the drop condition is met, otherwise null.
+   */
   act(day: MarketDay): Transaction | null {
     const currentPrice = day.price
 

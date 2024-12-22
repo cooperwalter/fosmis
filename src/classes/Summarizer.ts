@@ -1,3 +1,11 @@
+/**
+ * @module Summarizer
+ * 
+ * This module provides a `Summarizer` class that calculates the return on investment
+ * based on a list of transactions and market index data. It computes both the 
+ * percentage gain and the annualized return.
+ */
+
 import Transaction from "./Transaction";
 import MarketIndex from "./MarketIndex";
 import CapitalGain from "./CapitalGain";
@@ -7,12 +15,24 @@ class Summarizer {
   private _transactions: Array<Transaction>;
   private _marketIndex: MarketIndex;
 
+  /**
+   * Constructs a Summarizer instance.
+   * @param {number} principal - The initial principal amount.
+   * @param {Array<Transaction>} transactions - The list of transactions.
+   * @param {MarketIndex} marketIndex - The market index data.
+   */
   constructor(principal: number, transactions: Array<Transaction>, marketIndex: MarketIndex) {
     this._principal = principal;
     this._transactions = transactions;
     this._marketIndex = marketIndex;
   }
 
+  /**
+   * Calculates the return on investment.
+   * @returns {Object} An object containing the percentage gain and annualized return.
+   * @property {number} percentageGain - The percentage gain on the investment.
+   * @property {number} annualizedReturn - The annualized return on the investment.
+   */
   public calculateReturn(): { percentageGain: number, annualizedReturn: number } {
     // Get the last day of the MarketIndex
     const lastDay = this._marketIndex.lastDay;
