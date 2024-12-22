@@ -14,6 +14,13 @@ import Transaction from "../Transaction";
  */
 class AllUpfront extends Strategy {
   /**
+   * Create an AllUpfront strategy.
+   * @param {number} principal - The initial amount of money to invest.
+   */
+  constructor(principal: number) {
+    super(principal);
+  }
+  /**
    * Executes the strategy for a given market day. For the AllUpfront strategy,
    * the entire principal is spent on the first day.
    * @param {MarketDay} day - The market day on which to act.

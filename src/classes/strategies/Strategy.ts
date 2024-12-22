@@ -17,12 +17,6 @@ import Transaction from "../Transaction";
  */
 abstract class Strategy {
   /**
-   * The name of the strategy.
-   * @type {string}
-   */
-  public name: string;
-
-  /**
    * The principal amount available for the strategy.
    * @type {number}
    */
@@ -31,11 +25,9 @@ abstract class Strategy {
   /**
    * Creates an instance of a Strategy.
    * 
-   * @param {string} name - The name of the strategy.
    * @param {number} principal - The initial principal amount for the strategy.
    */
-  constructor(name: string, principal: number) {
-    this.name = name;
+  constructor(principal: number) {
     this.principal = principal;
   }
 

@@ -27,18 +27,20 @@ const PRINCIPAL = 100000;
  * @param {any} StrategyClass - The class representing the investment strategy.
  * @param {any[]} strategyArgs - The arguments to initialize the strategy.
  */
-async function runSimulation(strategyName: string, StrategyClass: any, strategyArgs: any[]) {
-  console.log(`****** Fosmis Simulation: ${strategyName} ******`);
+async function runSimulation(StrategyClass: any, strategyArgs: any[]) {
+  console.log(`****** Fosmis Simulation: ${StrategyClass.name} ******`);
+
   // Load the S&P 500 index from the data
   const sAndP500 = await loadIndex(Index.S_AND_P_500);
-
+  
   // Create a new scenario with the S&P 500 index
   // const scenario = new Scenario(sAndP500.firstDay.date, sAndP500.lastDay.date, PRINCIPAL, sAndP500);
   const scenario = new Scenario(new Date("2020-01-01"), sAndP500.lastDay.date, PRINCIPAL, sAndP500);
   // const scenario = new Scenario(new Date("2015-01-01"), new Date("2020-01-01"), PRINCIPAL, sAndP500);
-
+  
   // Create a new strategy instance with the scenario and strategy arguments
-  const strategy = new StrategyClass(strategyName, scenario.principal, ...strategyArgs);
+  const strategy = new StrategyClass(scenario.principal, ...strategyArgs);
+
 
   // Run the simulation
   const simulation = new Simulation(scenario, strategy);
@@ -65,13 +67,13 @@ async function main() {
   console.log("****** Fosmis Simulations ******");
   console.log(`Starting Principal: $${PRINCIPAL.toLocaleString()}`);
   console.log("");
-  await runSimulation("All Upfront", AllUpfront, []);
+  await runSimulation(AllUpfront, []);
   console.log("");
-  await runSimulation("Dollar Cost Averaging", DollarCostAveraging, [1000, 14]); // every 2 weeks
+  await runSimulation(DollarCostAveraging, [1000, 14]); // every 2 weeks
   console.log("");
-  await runSimulation("Downturn Fixed", DownturnFixed, [10000, 2]);
+  await runSimulation(DownturnFixed, [10000, 2]);
   console.log("");
-  await runSimulation("Downturn Proportional", DownturnProportional, [2, 10]);
+  await runSimulation(DownturnProportional, [2, 10]);
 }
 
 main();

@@ -23,13 +23,12 @@ class DownturnProportional extends Strategy {
   /**
    * Creates an instance of DownturnProportional.
    * 
-   * @param {string} name - The name of the strategy.
    * @param {number} principal - The initial amount of money to invest.
    * @param {number} dropPercentage - The percentage drop in price that triggers a transaction.
    * @param {number} dropSpendMultiplier - The multiplier of the drop percentage to determine spending.
    */
-  constructor(name: string, principal: number, dropPercentage: number, dropSpendMultiplier: number) {
-    super(name, principal);
+  constructor(principal: number, dropPercentage: number, dropSpendMultiplier: number) {
+    super(principal);
     this.dropPercentage = dropPercentage;
     this.dropSpendMultiplier = dropSpendMultiplier;
     this.lastPrice = null;

@@ -21,13 +21,12 @@ class DollarCostAveraging extends Strategy {
 
   /**
    * Create a Dollar Cost Averaging strategy.
-   * @param {string} name - The name of the strategy.
    * @param {number} principal - The initial amount of money to invest.
    * @param {number} fixedAmount - The fixed amount of money to invest at each interval.
    * @param {number} interval - The number of days between each investment.
    */
-  constructor(name: string, principal: number, fixedAmount: number, interval: number) {
-    super(name, principal);
+  constructor(principal: number, fixedAmount: number, interval: number) {
+    super(principal);
     this.fixedAmount = fixedAmount;
     this.interval = interval;
     this.counter = 0;
