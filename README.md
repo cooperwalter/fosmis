@@ -7,6 +7,7 @@ This project is a simulation of different investment strategies on the S&P 500 i
 - [ ] Add data farther into S&P500 history
 - [ ] Allow for different market indices
 - [ ] Allow for picking best performing *configuration* of a strategy for a given scenario
+- [ ] Allow for specifying a delay between actions (e.g. 7 days, 1 month)
 
 
 ## Project Structure
