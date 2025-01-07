@@ -12,10 +12,12 @@ import MarketDay from "../MarketDay";
 import Transaction from "../Transaction";
 
 /**
- * Class representing a downturn proportional investment strategy.
+ * Class representing a downturn proportional investment strategy. This strategy invests
+ * a proportion of the remaining principal based on the percentage drop in price since the last
+ * market price.
  * @extends Strategy
  */
-class DownturnProportional extends Strategy {
+class DownturnProportionalOfPrincipal extends Strategy {
   private dropPercentage: number;
   private lastPrice: number | null;
   private dropSpendMultiplier: number; // multiplier of the drop percentage to spend
@@ -36,7 +38,8 @@ class DownturnProportional extends Strategy {
 
   /**
    * Determines the action to take on a given market day. For the DownturnProportional strategy,
-   * the strategy spends a proportional amount of the principal based on the percentage drop in price.
+   * the strategy spends a proportional amount of the principal based on the percentage drop in price 
+   * since the last market price.
    * @param {MarketDay} day - The market day containing the current price.
    * @returns {Transaction | null} - A transaction if the conditions are met, otherwise null.
    */
@@ -53,9 +56,9 @@ class DownturnProportional extends Strategy {
       }
     }
 
-    this.lastPrice = currentPrice; // Set the last price if it's the first day or no transaction occurred
+    this.lastPrice = currentPrice;
     return null;
   }
 }
 
-export default DownturnProportional;
+export default DownturnProportionalOfPrincipal;

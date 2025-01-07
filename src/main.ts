@@ -9,7 +9,7 @@
 // Strategies
 import AllUpfront from "./classes/strategies/AllUpfront";
 import DollarCostAveraging from "./classes/strategies/DollarCostAveraging";
-import DownturnProportional from "./classes/strategies/DownturnProportional";
+import DownturnProportionalOfPrincipal from "./classes/strategies/DownturnProportionalOfPrincipal";
 import DownturnFixed from "./classes/strategies/DownturnFixed";
 
 // Classes
@@ -29,22 +29,20 @@ import chalk from "chalk";
  */
 const strategyConfigs: { [key: string]: any[] } = {
   // no args, all principal spent on the first day
-  [AllUpfront.name]: [
-    []
-  ],
+  [AllUpfront.name]: [[]],
   // args are (fixedAmount, interval)
   [DollarCostAveraging.name]: [
-    [1000, 14] // $1000 every 14 days
+    [1000, 14], // $1000 every 14 days
   ],
   // args are (fixedAmount, dropPercentage)
   [DownturnFixed.name]: [
-    [10000, 2] // $10,000 when the price drops by at least 2%
+    [10000, 2], // $10,000 when the price drops by at least 2%
   ],
   // args are (dropPercentage, dropSpendMultiplier)
-  [DownturnProportional.name]: [
-    [2, 10] // (drop % * principal * 10) when the price drops by at least 2%
-  ]
-}
+  [DownturnProportionalOfPrincipal.name]: [
+    [2, 10], // (drop % * principal * 10) when the price drops by at least 2%
+  ],
+};
 
 /**
  * Runs a simulation for a given investment strategy and scenario.
@@ -53,7 +51,7 @@ const strategyConfigs: { [key: string]: any[] } = {
  * @param {any[]} strategyArgs - The arguments to initialize the strategy.
  * @param {Scenario} scenario - The scenario to run the simulation on.
  */
-async function runSimulation(StrategyClass: any, strategyArgs: any[], scenario: Scenario) {
+async function runSimulation(StrategyClass: any, strategyArgs: any[], scenario: Scenario, detailed: boolean = false) {
   console.log(`Arguments: ${strategyArgs.join(", ")}`);
 
   // Create a new strategy instance with the scenario and strategy arguments
@@ -70,6 +68,9 @@ async function runSimulation(StrategyClass: any, strategyArgs: any[], scenario: 
   console.log(`* Percentage return: ${percentageGain}%`);
   console.log(`* Annualized return: ${annualizedReturn}%`);
   console.log(`* Number of transactions: ${numberOfTransactions}`);
+  if (detailed) {
+    console.log(`* Transactions are:\n${transactions.map((t, i) => `${i + 1}. ${t.day.date.toISOString().split("T")[0]} - ${t.amount}`).join("\n")}`);
+  }
   console.log(`* Cash left: $${cashLeft.toLocaleString()}`);
   console.log("</Results>");
 }
@@ -105,8 +106,9 @@ async function main() {
 
   // Define multiple scenarios
   const scenarios = [
+    new Scenario(sAndP500.firstDay.date, sAndP500.lastDay.date, 100000, sAndP500),
+    new Scenario(new Date("2015-01-01"), new Date("2020-01-01"), 100000, sAndP500),
     new Scenario(new Date("2020-01-01"), sAndP500.lastDay.date, 100000, sAndP500),
-    new Scenario(new Date("2015-01-01"), new Date("2020-01-01"), 100000, sAndP500)
   ];
 
   for (const scenario of scenarios) {
@@ -121,8 +123,16 @@ async function main() {
       console.log(`****** Fosmis Simulations: ${chalk.blue(DownturnFixed.name)} ******`);
     await runAllSimulationsFor(DownturnFixed, strategyConfigs[DownturnFixed.name], [scenario]);
     console.log("");
-    console.log(`****** Fosmis Simulations: ${chalk.blue(DownturnProportional.name)} ******`);
-    await runAllSimulationsFor(DownturnProportional, strategyConfigs[DownturnProportional.name], [scenario]);
+    console.log(
+      `****** Fosmis Simulations: ${chalk.blue(
+        DownturnProportionalOfPrincipal.name
+      )} ******`
+    );
+    await runAllSimulationsFor(
+      DownturnProportionalOfPrincipal,
+      strategyConfigs[DownturnProportionalOfPrincipal.name],
+      [scenario]
+    );
     console.log("");
   }
 }
