@@ -17,7 +17,7 @@ import Transaction from "../Transaction";
  * market price.
  * @extends Strategy
  */
-class DownturnProportionalOfPrincipal extends Strategy {
+class DownturnProportionalOfRemainingPrincipal extends Strategy {
   private dropPercentage: number;
   private lastPrice: number | null;
   private dropSpendMultiplier: number; // multiplier of the drop percentage to spend
@@ -37,7 +37,7 @@ class DownturnProportionalOfPrincipal extends Strategy {
   }
 
   /**
-   * Determines the action to take on a given market day. For the DownturnProportional strategy,
+   * Determines the action to take on a given market day. For the DownturnProportionalOfRemainingPrincipal strategy,
    * the strategy spends a proportional amount of the principal based on the percentage drop in price 
    * since the last market price.
    * @param {MarketDay} day - The market day containing the current price.
@@ -61,4 +61,4 @@ class DownturnProportionalOfPrincipal extends Strategy {
   }
 }
 
-export default DownturnProportionalOfPrincipal;
+export default DownturnProportionalOfRemainingPrincipal;

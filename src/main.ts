@@ -9,8 +9,9 @@
 // Strategies
 import AllUpfront from "./classes/strategies/AllUpfront";
 import DollarCostAveraging from "./classes/strategies/DollarCostAveraging";
-import DownturnProportionalOfPrincipal from "./classes/strategies/DownturnProportionalOfPrincipal";
+import DownturnProportionalOfRemainingPrincipal from "./classes/strategies/DownturnProportionOfRemainingPrincipal";
 import DownturnFixed from "./classes/strategies/DownturnFixed";
+import DownturnProportionalOfInitialPrincipal from "./classes/strategies/DownturnProportionOfInitialPrincipal";
 
 // Classes
 import Scenario from "./classes/Scenario";
@@ -39,8 +40,12 @@ const strategyConfigs: { [key: string]: any[] } = {
     [10000, 2], // $10,000 when the price drops by at least 2%
   ],
   // args are (dropPercentage, dropSpendMultiplier)
-  [DownturnProportionalOfPrincipal.name]: [
+  [DownturnProportionalOfRemainingPrincipal.name]: [
     [2, 10], // (drop % * principal * 10) when the price drops by at least 2%
+  ],
+  // args are (amountToSpend, dropPercentage, dropSpendMultiplier)
+  [DownturnProportionalOfInitialPrincipal.name]: [
+    [1, 1], // (drop% * amountToSpend * dropSpendMultiplier) when the price drops by at least 1%
   ],
 };
 
@@ -125,12 +130,19 @@ async function main() {
     console.log("");
     console.log(
       `****** Fosmis Simulations: ${chalk.blue(
-        DownturnProportionalOfPrincipal.name
+        DownturnProportionalOfRemainingPrincipal.name
       )} ******`
     );
     await runAllSimulationsFor(
-      DownturnProportionalOfPrincipal,
-      strategyConfigs[DownturnProportionalOfPrincipal.name],
+      DownturnProportionalOfRemainingPrincipal,
+      strategyConfigs[DownturnProportionalOfRemainingPrincipal.name],
+      [scenario]
+    );
+    console.log("");
+    console.log(`****** Fosmis Simulations: ${chalk.blue(DownturnProportionalOfInitialPrincipal.name)} ******`);
+    await runAllSimulationsFor(
+      DownturnProportionalOfInitialPrincipal,
+      strategyConfigs[DownturnProportionalOfInitialPrincipal.name],
       [scenario]
     );
     console.log("");
