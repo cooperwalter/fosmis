@@ -2,6 +2,13 @@
 
 This project is a simulation of different investment strategies on the S&P 500 index. It uses the data from the S&P 500 index and simulates different investment strategies over a specified period.
 
+## TODO
+
+- [ ] Add data farther into S&P500 history
+- [ ] Allow for different market indices
+- [ ] Allow for picking best performing *configuration* of a strategy for a given scenario
+
+
 ## Project Structure
 
 - **src/main.ts**: The entry point of the application. It sets up the simulation and outputs the results.
